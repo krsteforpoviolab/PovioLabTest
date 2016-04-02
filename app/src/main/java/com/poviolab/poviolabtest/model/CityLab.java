@@ -36,4 +36,12 @@ public class CityLab {
     public City getCity(long i) {
         return mCities.get((int)i);
     }
+
+    public City getCity(int i) {
+        return mCities.get(i);
+    }
+
+    public void deleteCity(long id) {
+        mCities.remove((int)id);
+    }
 }

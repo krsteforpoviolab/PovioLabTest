@@ -4,6 +4,10 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
 
+    <!-- Cities -->
+    <string name="undo">Undo</string>
+    <string name="delete_city">Delete %1$s ?</string>
+
     <!-- Add City -->
     <string name="empty_list">Empty List (please add some cities)</string>
     <string name="add_city">Add city</string>
