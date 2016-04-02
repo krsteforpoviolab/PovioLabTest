@@ -4,6 +4,15 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
 
+    <!-- Add City -->
     <string name="empty_list">Empty List (please add some cities)</string>
     <string name="add_city">Add city</string>
+    <string name="enter_city_name">Enter city name</string>
+
+    <!-- City Details -->
+    <string name="city_name">City name:</string>
+    <string name="temperature">Temperature:</string>
+    <string name="humidity">Humidity:</string>
+    <string name="description">Description:</string>
+
 </resources>
