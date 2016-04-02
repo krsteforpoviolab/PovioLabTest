@@ -33,7 +33,7 @@ public class CityLab {
         return mCities;
     }
 
-    public City getCity(int i) {
-        return mCities.get(i);
+    public City getCity(long i) {
+        return mCities.get((int)i);
     }
 }

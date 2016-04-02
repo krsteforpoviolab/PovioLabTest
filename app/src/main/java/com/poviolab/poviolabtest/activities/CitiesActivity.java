@@ -43,11 +43,10 @@ public class CitiesActivity extends AppCompatActivity {
 
         //add some dummy data
         CityLab cityLab = CityLab.get(CitiesActivity.this.getApplicationContext());
-        for (int i = 0; i < 100; i++) {
             City c = new City();
-            c.setName("name " + i);
+            c.setName("London");
             cityLab.addCity(c);
-        }
+
 
         updateUI();
     }

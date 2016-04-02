@@ -14,5 +14,8 @@
     <string name="temperature">Temperature:</string>
     <string name="humidity">Humidity:</string>
     <string name="description">Description:</string>
+    <string name="please_wait">Please wait...</string>
+    <string name="problem_fetching_msg">Problem occured, please check you internet connection or contact us.</string>
+    <string name="invalid_city">Invalid city name</string>
 
 </resources>
