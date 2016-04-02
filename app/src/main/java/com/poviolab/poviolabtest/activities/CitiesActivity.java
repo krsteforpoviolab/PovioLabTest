@@ -55,7 +55,7 @@ public class CitiesActivity extends AppCompatActivity {
                 CityLab cityLab = CityLab.get(CitiesActivity.this.getApplicationContext());
                 Resources res = getResources();
                 String deleteCity = String.format(res.getString(R.string.delete_city),
-                        cityLab.getCity(viewHolder.getAdapterPosition()).getName());
+                        cityLab.getCity(mCities.get(viewHolder.getAdapterPosition()).get_id()).getName());
 
                 Snackbar.make(findViewById(R.id.parent_coordinator_layout), deleteCity, Snackbar.LENGTH_LONG).setCallback(new Snackbar.Callback() {
                     @Override
@@ -95,12 +95,12 @@ public class CitiesActivity extends AppCompatActivity {
         itemTouchHelper.attachToRecyclerView(mCrimeRecyclerView);
 
         //add some dummy data
-        CityLab cityLab = CityLab.get(CitiesActivity.this.getApplicationContext());
-        for (int i=0; i<30;i++) {
-            City c = new City();
-            c.setName("London "+i);
-            cityLab.addCity(c);
-        }
+//        CityLab cityLab = CityLab.get(CitiesActivity.this.getApplicationContext());
+//        for (int i=0; i<10;i++) {
+//            City c = new City();
+//            c.setName("London "+i);
+//            cityLab.addCity(c);
+//        }
 
 
         updateUI();
@@ -113,10 +113,9 @@ public class CitiesActivity extends AppCompatActivity {
         if (mAdapter == null) {
             mAdapter = new CityAdapter(CitiesActivity.this.getApplicationContext(), mCities);
             mCrimeRecyclerView.setAdapter(mAdapter);
-        } else {
-            mAdapter.setCrimes(mCities);
-            mAdapter.notifyDataSetChanged();
         }
+        mAdapter.setCrimes(mCities);
+        mAdapter.notifyDataSetChanged();
 
         if (mCities.isEmpty()) {
             ((TextView) findViewById(R.id.no_items_text_view)).setVisibility(View.VISIBLE);
