@@ -1,5 +1,6 @@
 package com.poviolab.poviolabtest.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -35,17 +36,17 @@ public class CitiesActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                Intent i = AddCityActivity.newIntent(CitiesActivity.this);
+                startActivity(i);
             }
         });
 
         //add some dummy data
         CityLab cityLab = CityLab.get(CitiesActivity.this.getApplicationContext());
-        for (int i=0; i<100;i++){
-            City c=new City();
-            c.setName("name "+i);
+        for (int i = 0; i < 100; i++) {
+            City c = new City();
+            c.setName("name " + i);
             cityLab.addCity(c);
-
         }
 
         updateUI();
@@ -70,4 +71,9 @@ public class CitiesActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        updateUI();
+    }
 }
