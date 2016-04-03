@@ -39,7 +39,7 @@ public class CityAdapter extends RecyclerView.Adapter<CityHolder>  {
         return mCities.size();
     }
 
-    public void setCrimes(List<City> cities) {
+    public void setCities(List<City> cities) {
         mCities = cities;
     }
 

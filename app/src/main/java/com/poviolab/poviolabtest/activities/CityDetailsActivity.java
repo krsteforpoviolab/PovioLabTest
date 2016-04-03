@@ -121,6 +121,12 @@ public class CityDetailsActivity extends AppCompatActivity {
                 ((TextView)findViewById(R.id.city_name_text_view)).setText(jsonObject.getString("name"));
                 ((TextView)findViewById(R.id.temp_text_view)).setText("" + mainJsonObject.getDouble("temp"));
                 ((TextView)findViewById(R.id.humidity_text_view)).setText("" + mainJsonObject.getDouble("humidity"));
+
+                //update db with the last info for the temperature
+                CityLab cityLab = CityLab.get(CityDetailsActivity.this.getApplicationContext());
+                mCity.setLastKnownTemperature(mainJsonObject.getDouble("temp"));
+                cityLab.updateCity(mCity);
+
             }else{
                 Toast.makeText(CityDetailsActivity.this, R.string.invalid_city, Toast.LENGTH_LONG).show();
                 finish();

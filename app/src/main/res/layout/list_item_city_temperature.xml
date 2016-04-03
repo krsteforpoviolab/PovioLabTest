@@ -3,12 +3,25 @@
     android:layout_height="wrap_content"
     android:padding="@dimen/item_padding">
 
+    <TextView
+        android:id="@+id/city_name_text_view"
+        style="@android:style/TextAppearance.Medium"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:text=""
+        android:textColor="@color/dark_text" />
 
     <TextView
         android:id="@+id/temperature_city_text_view"
         style="@android:style/TextAppearance.Medium"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
         android:text=""
         android:textColor="@color/dark_text" />
+
+
 </RelativeLayout>

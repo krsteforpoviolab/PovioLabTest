@@ -14,6 +14,7 @@ public class CityHolder extends RecyclerView.ViewHolder
         implements View.OnClickListener {
 
     private TextView mCityTextView;
+    private TextView mTemperatureTextView;
     private Context mContext;
     private City mCity;
 
@@ -21,12 +22,19 @@ public class CityHolder extends RecyclerView.ViewHolder
         super(itemView);
         mContext = c;
         itemView.setOnClickListener(this);
-        mCityTextView = (TextView) itemView.findViewById(R.id.temperature_city_text_view);
+        mCityTextView = (TextView) itemView.findViewById(R.id.city_name_text_view);
+        mTemperatureTextView = (TextView) itemView.findViewById(R.id.temperature_city_text_view);
      }
 
     public void bindCity(City city) {
         mCity = city;
         mCityTextView.setText(mCity.getName());
+        if (mCity.getLastKnownTemperature()<-100000){
+            mTemperatureTextView.setText("n/a");//not available yet
+        }else{
+            mTemperatureTextView.setText(String.valueOf(mCity.getLastKnownTemperature()));
+        }
+
     }
 
     @Override

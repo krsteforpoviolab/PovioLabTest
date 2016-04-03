@@ -4,6 +4,16 @@ package com.poviolab.poviolabtest.model;
 public class City {
     private long _id;
     private String name;
+    //quick hack
+    private double lastKnownTemperature=-100001;
+
+    public double getLastKnownTemperature() {
+        return lastKnownTemperature;
+    }
+
+    public void setLastKnownTemperature(double lastKnownTemperature) {
+        this.lastKnownTemperature = lastKnownTemperature;
+    }
 
     public String getName() {
         return name;

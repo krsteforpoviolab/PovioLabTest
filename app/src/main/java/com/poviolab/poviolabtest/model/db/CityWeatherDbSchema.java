@@ -8,6 +8,7 @@ public class CityWeatherDbSchema {
         public static final class Cols {
             public static final String ID = "_id";
             public static final String NAME = "name";
+            public static final String LAST_KNOWN_TEMPERATURE = "last_known_temp";
         }
     }
 

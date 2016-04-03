@@ -18,8 +18,9 @@ public class CityWeatherDbHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
 
         db.execSQL("create table " + CityWeatherDbSchema.CityTable.NAME + "(" +
-                        CityWeatherDbSchema.CityTable.Cols.ID +" integer primary key autoincrement, " +
-                        CityWeatherDbSchema.CityTable.Cols.NAME +
+                        CityWeatherDbSchema.CityTable.Cols.ID + " integer primary key autoincrement, " +
+                        CityWeatherDbSchema.CityTable.Cols.NAME + " , " +
+                        CityWeatherDbSchema.CityTable.Cols.LAST_KNOWN_TEMPERATURE +
                         ")"
         );
     }

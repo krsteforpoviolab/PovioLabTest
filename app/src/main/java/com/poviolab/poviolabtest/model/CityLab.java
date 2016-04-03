@@ -36,7 +36,6 @@ public class CityLab {
     public void addCity(City c) {
         ContentValues values = getContentValues(c);
         long id = mDatabase.insert(CityWeatherDbSchema.CityTable.NAME, null, values);
-
     }
 
     public City getCity(long id) {
@@ -63,18 +62,18 @@ public class CityLab {
 
     //
     public List<City> getCities() {
-        List<City> crimes = new ArrayList<>();
+        List<City> cities = new ArrayList<>();
 
         CityCursorWrapper cursor = queryCities(null, null);
 
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
-            crimes.add(cursor.getCity());
+            cities.add(cursor.getCity());
             cursor.moveToNext();
         }
         cursor.close();
 
-        return crimes;
+        return cities;
     }
 
     private CityCursorWrapper queryCities(String whereClause, String[] whereArgs) {
@@ -91,19 +90,20 @@ public class CityLab {
         return new CityCursorWrapper(cursor);
     }
 
-//    public void updateCity(City city) {
-//        String name = city.getName().toString();
-//        ContentValues values = getContentValues(city);
-//
-//        mDatabase.update(CityWeatherDbSchema.CityTable.NAME, values,
-//                CityTemperatureDbSchema.CityTable.Cols.NAME + " = ?",
-//                new String[]{name});
-//    }
+    public void updateCity(City city) {
+        String id = String.valueOf(city.get_id());
+        ContentValues values = getContentValues(city);
+
+        mDatabase.update(CityWeatherDbSchema.CityTable.NAME, values,
+                CityWeatherDbSchema.CityTable.Cols.ID + " = ?",
+                new String[]{id});
+    }
 
     private static ContentValues getContentValues(City city) {
         ContentValues values = new ContentValues();
         //values.put(CityTemperatureDbSchema.CityTable.Cols.ID, city.get_id());
         values.put(CityWeatherDbSchema.CityTable.Cols.NAME, city.getName());
+        values.put(CityWeatherDbSchema.CityTable.Cols.LAST_KNOWN_TEMPERATURE, city.getLastKnownTemperature());
         return values;
     }
 }

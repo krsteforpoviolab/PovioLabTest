@@ -2,9 +2,11 @@ package com.poviolab.poviolabtest.activities;
 
 import android.content.Intent;
 import android.content.res.Resources;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -16,23 +18,29 @@ import com.poviolab.poviolabtest.R;
 import com.poviolab.poviolabtest.adapter.CityAdapter;
 import com.poviolab.poviolabtest.model.City;
 import com.poviolab.poviolabtest.model.CityLab;
+import com.poviolab.poviolabtest.openweather.JSONHelper;
+import com.poviolab.poviolabtest.openweather.OpenWeatherAPI;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.List;
 
-public class CitiesActivity extends AppCompatActivity {
+public class CitiesActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
 
-    private RecyclerView mCrimeRecyclerView;
+    private RecyclerView mCitiesRecyclerView;
     private CityAdapter mAdapter;
     private List<City> mCities;
+    private SwipeRefreshLayout mSwipeLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cities);
 
-        mCrimeRecyclerView = (RecyclerView)
+        mCitiesRecyclerView = (RecyclerView)
                 findViewById(R.id.cities_recycler_view);
-        mCrimeRecyclerView.setLayoutManager(new LinearLayoutManager(CitiesActivity.this));
+        mCitiesRecyclerView.setLayoutManager(new LinearLayoutManager(CitiesActivity.this));
 
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -71,7 +79,7 @@ public class CitiesActivity extends AppCompatActivity {
                                 CityLab cityLab = CityLab.get(CitiesActivity.this.getApplicationContext());
                                 cityLab.deleteCity(mCities.get(viewHolder.getAdapterPosition()).get_id());
                                 mCities = cityLab.getCities();
-                                mAdapter.setCrimes(mCities);
+                                mAdapter.setCities(mCities);
                                 mAdapter.notifyItemRemoved(viewHolder.getAdapterPosition());
                                 break;
                         }
@@ -92,7 +100,7 @@ public class CitiesActivity extends AppCompatActivity {
 
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
 
-        itemTouchHelper.attachToRecyclerView(mCrimeRecyclerView);
+        itemTouchHelper.attachToRecyclerView(mCitiesRecyclerView);
 
         //add some dummy data
 //        CityLab cityLab = CityLab.get(CitiesActivity.this.getApplicationContext());
@@ -103,7 +111,11 @@ public class CitiesActivity extends AppCompatActivity {
 //        }
 
 
+        mSwipeLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_container);
+        mSwipeLayout.setOnRefreshListener(this);
+
         updateUI();
+        new AsyncTaskRunner().execute();
     }
 
     private void updateUI() {
@@ -112,9 +124,9 @@ public class CitiesActivity extends AppCompatActivity {
 
         if (mAdapter == null) {
             mAdapter = new CityAdapter(CitiesActivity.this.getApplicationContext(), mCities);
-            mCrimeRecyclerView.setAdapter(mAdapter);
+            mCitiesRecyclerView.setAdapter(mAdapter);
         }
-        mAdapter.setCrimes(mCities);
+        mAdapter.setCities(mCities);
         mAdapter.notifyDataSetChanged();
 
         if (mCities.isEmpty()) {
@@ -128,5 +140,46 @@ public class CitiesActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         updateUI();
+    }
+
+    @Override
+    public void onRefresh() {
+        new AsyncTaskRunner().execute();
+    }
+
+
+    private class AsyncTaskRunner extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            try {
+                List<City> cities = CityLab.get(CitiesActivity.this.getApplicationContext()).getCities();
+                JSONHelper jsonHelper = new JSONHelper();
+
+                for (int i = 0; i < cities.size(); i++) {
+                    String response = jsonHelper.getJSON(OpenWeatherAPI.addCityNameToUrl(OpenWeatherAPI.OPEN_WEATHER_URL, cities.get(i).getName()));
+                    if (response != null) {
+                        //parse temperature
+                        JSONObject jsonObject = new JSONObject(response);
+                        JSONArray jsonArray=jsonObject.getJSONArray("weather");
+                        JSONObject weatherJsonObject = jsonArray.getJSONObject(0);
+                        JSONObject mainJsonObject = jsonObject.getJSONObject("main");
+                        //update city temperature
+                        cities.get(i).setLastKnownTemperature(mainJsonObject.getDouble("temp"));
+                        CityLab.get(CitiesActivity.this.getApplicationContext()).updateCity(cities.get(i));
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            mSwipeLayout.setRefreshing(false);
+            updateUI();
+        }
     }
 }
